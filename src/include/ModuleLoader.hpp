@@ -12,11 +12,14 @@
 #include <string>
 #include <set>
 #include <boost/program_options.hpp>
-
+/*
+class IAlbedo;
+class SNUAlbedo;
+class SNU2Albedo;
+class CCSMAlbedo;
+*/
 class ModuleLoader {
 public:
-    virtual ~ModuleLoader();
-
     static ModuleLoader& getLoader()
     {
         static ModuleLoader instance; // C++11 magic static
@@ -28,7 +31,17 @@ public:
         thermodynamics
     };
 
-    typedef boost::program_options::variables_map VariablesMap;
+    // List of all possible implementations of any of the Modules
+    enum class Implementation {
+        SNUAlbedo,
+        SNU2Albedo,
+        CCSMAlbedo,
+        thermoWinton,
+        thermoIce0
+    };
+
+    //typedef boost::program_options::variables_map VariablesMap;
+    typedef std::map<std::string, std::string> VariablesMap;
 
     void init(const VariablesMap&);
     std::set<std::string> listImplementationNames(const Module) const;
@@ -38,9 +51,8 @@ public:
     void setImplementation(const Module, const std::string&);
     void setImplementation(const std::string&, const std::string&);
     template<class T>
-    std::unique_ptr<T> getImplementation(const Module) const;
-    template<class T>
-    std::unique_ptr<T> getImplementation(const std::string&) const;
+    std::unique_ptr<T> getImplementation() const;
+    // Explicit specializations for the interface classes
 
     // Singleton function definitions
 private:
@@ -49,6 +61,15 @@ public:
     ModuleLoader(const ModuleLoader&)   = delete;
     void operator=(const ModuleLoader&) = delete;
 
+private:
+    // One module could have many names (but probably shouldn't)
+    std::map<std::string, Module> m_modules;
+    // Names of all available implmentations
+    std::map<std::string, Implementation> m_namedImplementations;
+    // Names of implementations
+    std::map<Module, std::set<std::string>> m_availableImplementationNames;
+    // Enums of the selected implementations for each module
+    std::map<Module, Implementation> m_implementations;
 };
 
 #endif /* SRC_INCLUDE_MODULELOADER_HPP */
