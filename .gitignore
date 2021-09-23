@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Eclipse & Cmake
+/build/
+/.cproject
+/.project
+/.settings
