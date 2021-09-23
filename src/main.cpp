@@ -21,6 +21,8 @@ int main(int argc, char* argv[])
             map["Albedo"] = "SNUAlbedo";
         } else if (std::string(argv[1]) == "ccsm"){
             map["Albedo"] = "CCSMAlbedo";
+        } else if (std::string(argv[1]) == "ukmoum"){
+            map["Albedo"] = "UMAlbedo";
         }
     }
 

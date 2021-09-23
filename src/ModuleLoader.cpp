@@ -51,6 +51,12 @@ void ModuleLoader::init(const VariablesMap& map)
 
     // Load the named implementations from the provided map
     for (auto const& i : map) {
+        Module module = m_modules[i.first];
+        if (m_availableImplementationNames[module].count(i.second) < 1) {
+            std::string what = "ModuleLoader::init(): Module ";
+            what += i.first + " does not have an implementation named " + i.second;
+            throw std::invalid_argument(what);
+        }
         m_implementations[m_modules[i.first]] = m_namedImplementations[i.second];
     }
 }
