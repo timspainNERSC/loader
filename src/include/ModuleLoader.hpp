@@ -2,7 +2,6 @@
  * @file ModuleLoader.hpp
  *
  * @date Sep 23, 2021
- * @author Tim Spain
  */
 
 #ifndef SRC_INCLUDE_MODULELOADER_HPP
@@ -11,7 +10,7 @@
 #include <memory>
 #include <string>
 #include <set>
-#include <boost/program_options.hpp>
+#include <map>
 
 class ModuleLoader {
 public:
@@ -21,7 +20,6 @@ public:
         return instance;
     }
 
-    //typedef boost::program_options::variables_map VariablesMap;
     typedef std::map<std::string, std::string> VariablesMap;
 
     void init(const VariablesMap&);
