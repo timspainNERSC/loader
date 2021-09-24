@@ -13,6 +13,8 @@
 class thermoIce0: public Ithermodynamics {
 public:
     std::string name() const;
+private:
+    std::string realName() const;
 };
 
 #endif /* SRC_INCLUDE_THERMOICE0_HPP_ */
