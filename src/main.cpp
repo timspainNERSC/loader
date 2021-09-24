@@ -29,6 +29,17 @@ int main(int argc, char* argv[])
     ModuleLoader& loader = ModuleLoader::getLoader();
     loader.init(map);
 
+    std::cout << "Available modules are:" << std::endl;
+    for ( auto mm : loader.listModules()) {
+        std::cout << "    " << mm << std::endl;
+    }
+
+    std::string firstModule = *loader.listModules().begin();
+    std::cout << "Available implementations for module " << firstModule << " are:" << std::endl;
+    for (auto ii : loader.listImplementations(firstModule)) {
+        std::cout << "    " << ii << std::endl;
+    }
+
     std::unique_ptr<IAlbedo> pAlbedo;
     pAlbedo = loader.getImplementation<IAlbedo>();
     double albedo = pAlbedo->albedo();

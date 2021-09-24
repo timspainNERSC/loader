@@ -25,7 +25,11 @@ public:
     typedef std::map<std::string, std::string> VariablesMap;
 
     void init(const VariablesMap&);
-    inline std::set<std::string> listImplementationNames(const std::string& module) const
+    inline const std::set<std::string>& listModules() const
+    {
+        return m_modules;
+    }
+    inline const std::set<std::string>& listImplementations(const std::string& module) const
     {
         return m_availableImplementationNames.at(module);
     }
