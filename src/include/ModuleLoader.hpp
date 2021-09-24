@@ -12,12 +12,7 @@
 #include <string>
 #include <set>
 #include <boost/program_options.hpp>
-/*
-class IAlbedo;
-class SNUAlbedo;
-class SNU2Albedo;
-class CCSMAlbedo;
-*/
+
 class ModuleLoader {
 public:
     static ModuleLoader& getLoader()
@@ -30,11 +25,12 @@ public:
     typedef std::map<std::string, std::string> VariablesMap;
 
     void init(const VariablesMap&);
-    std::set<std::string> listImplementationNames(const std::string&) const;
-    void setImplementation(const std::string&, const std::string&);
+    inline std::set<std::string> listImplementationNames(const std::string& module) const
+    {
+        return m_availableImplementationNames.at(module);
+    }
     template<class T>
     std::unique_ptr<T> getImplementation() const;
-    // Explicit specializations for the interface classes
 
     // Singleton function definitions
 private:
