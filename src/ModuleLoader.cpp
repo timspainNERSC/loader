@@ -17,60 +17,56 @@ void ModuleLoader::init(const VariablesMap& map)
     // Initialise the available modules. This is currently hardcoded at compile time.
     // TODO: Use CMake etc. to create a system that is dynamically built at compile time.
 
-    m_modules = {
-            {"Albedo", Module::iceAlbedo},
-            {"thermodynamics", Module::thermodynamics}
-    };
-
     m_availableImplementationNames = {
             {
-                    Module::iceAlbedo, {
+                    "Albedo", {
                     "SNUAlbedo",
                     "SNU2Albedo",
                     "CCSMAlbedo"
                     }
             },{
-                    Module::thermodynamics, {
+                    "thermodynamics", {
                             "thermoWinton",
                             "thermoIce0"
                     }
             }
     };
 
-    m_namedImplementations = {
-            {"SNUAlbedo", Implementation::SNUAlbedo},
-            {"SNU2Albedo", Implementation::SNU2Albedo},
-            {"CCSMAlbedo", Implementation::CCSMAlbedo},
-            {"thermoWinton", Implementation::thermoWinton},
-            {"thermoIce0", Implementation::thermoIce0}
-    };
+    // Set of all defined interfaces
+    for (const auto& element: m_availableImplementationNames) {
+        m_modules.insert(element.first);
+    }
 
     // Load default implementations
-    m_implementations[Module::iceAlbedo] = Implementation::SNUAlbedo;
-    m_implementations[Module::thermodynamics] = Implementation::thermoIce0;
+    m_implementations["Albedo"] = "SNUAlbedo";
+    m_implementations["thermodynamics"] = "thermoIce0";
 
     // Load the named implementations from the provided map
     for (auto const& i : map) {
-        Module module = m_modules[i.first];
+        std::string module = i.first;
+        if (m_modules.count(module) < 1) {
+            // Default to ignoring unknown modules
+            continue;
+        }
         if (m_availableImplementationNames[module].count(i.second) < 1) {
             std::string what = "ModuleLoader::init(): Module ";
-            what += i.first + " does not have an implementation named " + i.second;
+            what += module + " does not have an implementation named " + i.second;
             throw std::invalid_argument(what);
         }
-        m_implementations[m_modules[i.first]] = m_namedImplementations[i.second];
+        m_implementations[i.first] = i.second;
     }
 }
 
 template<>
 std::unique_ptr<IAlbedo> ModuleLoader::getImplementation() const
 {
-    Implementation impl = m_implementations.at(Module::iceAlbedo);
-    switch(impl) {
-    case(Implementation::SNUAlbedo):
+    std::string impl = m_implementations.at("Albedo");
+    if (impl == "SNUAlbedo")
             return std::unique_ptr<SNUAlbedo>(new SNUAlbedo);
-    case(Implementation::CCSMAlbedo):
+    else if (impl == "CCSMAlbedo")
             return std::unique_ptr<CCSMAlbedo>(new CCSMAlbedo);
-    default:
+    // m_implementations should only have valid values due to the check when loading the names into
+    // the map
+    else
         return nullptr;
-    }
 }
