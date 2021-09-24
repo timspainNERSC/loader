@@ -26,19 +26,7 @@ public:
         return instance;
     }
 
-    enum class Module {
-        iceAlbedo,
-        thermodynamics
-    };
-
-    // List of all possible implementations of any of the Modules
-    enum class Implementation {
-        SNUAlbedo,
-        SNU2Albedo,
-        CCSMAlbedo,
-        thermoWinton,
-        thermoIce0
-    };
+#include "modules_implementations.ipp"
 
     //typedef boost::program_options::variables_map VariablesMap;
     typedef std::map<std::string, std::string> VariablesMap;
