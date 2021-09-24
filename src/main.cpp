@@ -12,6 +12,7 @@
 
 #include "include/ModuleLoader.hpp"
 #include "include/IAlbedo.hpp"
+#include "include/Ithermodynamics.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -19,10 +20,19 @@ int main(int argc, char* argv[])
     if (argc > 1) {
         if (std::string(argv[1]) == "snu") {
             map["Albedo"] = "SNUAlbedo";
+        } else if (std::string(argv[1]) == "snu2") {
+            map["Albedo"] = "SNU2Albedo";
         } else if (std::string(argv[1]) == "ccsm"){
             map["Albedo"] = "CCSMAlbedo";
         } else if (std::string(argv[1]) == "ukmoum"){
             map["Albedo"] = "UMAlbedo";
+        }
+    }
+    if (argc > 2) {
+        if (std::string(argv[2]) == "winton") {
+            map["thermodynamics"] = "thermoWinton";
+        } else if (std::string(argv[2]) == "ice0"){
+            map["thermodynamics"] = "thermoIce0";
         }
     }
 
@@ -45,4 +55,8 @@ int main(int argc, char* argv[])
     double albedo = pAlbedo->albedo();
 
     std::cout << "Albedo is " << albedo << std::endl;
+
+    std::unique_ptr<Ithermodynamics> pthermo = loader.getImplementation<Ithermodynamics>();
+
+    std::cout << "Thermodynamics routine is named " << pthermo->name() << std::endl;
 }

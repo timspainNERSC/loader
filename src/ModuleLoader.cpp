@@ -10,12 +10,16 @@
 
 #include "include/IAlbedo.hpp"
 #include "include/SNUAlbedo.hpp"
+#include "include/SNU2Albedo.hpp"
 #include "include/CCSMAlbedo.hpp"
+
+#include "include/Ithermodynamics.hpp"
+#include "include/thermoWinton.hpp"
+#include "include/thermoIce0.hpp"
 
 // Pointers to functions returning new instances implementing the interfaces
 std::unique_ptr<IAlbedo> (*AlbedoImpl)();
-// std::unique_ptr<Ithermodynamics> (*thermodynamicsImpl)();
-// TODO: Implement the thermodynamics modules to uncomment ^this
+std::unique_ptr<Ithermodynamics> (*thermodynamicsImpl)();
 
 // Functions creating a new instance of each implementation, and returning it
 // as a pointer to its interface class
@@ -24,23 +28,25 @@ std::unique_ptr<IAlbedo> newSNUAlbedo()
 {
     return std::unique_ptr<SNUAlbedo>(new SNUAlbedo);
 }
+std::unique_ptr<IAlbedo> newSNU2Albedo()
+{
+    return std::unique_ptr<SNU2Albedo>(new SNU2Albedo);
+}
 std::unique_ptr<IAlbedo> newCCSMAlbedo()
 {
     return std::unique_ptr<CCSMAlbedo>(new CCSMAlbedo);
 }
-/*// thermodynamics
+// thermodynamics
 std::unique_ptr<Ithermodynamics> newthermoWinton()
 {
-return std::unique_ptr(new thermoWinton);
+return std::unique_ptr<thermoWinton>(new thermoWinton);
 }
 std::unique_ptr<Ithermodynamics> newthermoIce0()
 {
-return std::unique_ptr(new thermoIce0);
+return std::unique_ptr<thermoIce0>(new thermoIce0);
 }
-*/
-// TODO: Implement the thermodynamics modules to uncomment ^this
 
-void throwup(std::string module, std::string impl)
+void throwup(const std::string& module, const std::string& impl)
 {
     std::string what = "ModuleLoader::init(): Module ";
     what += module + " does not have an implementation named " + impl;
@@ -56,7 +62,7 @@ void ModuleLoader::init(const VariablesMap& map)
             {
                     "Albedo", {
                     "SNUAlbedo",
-//                    "SNU2Albedo",
+                    "SNU2Albedo",
                     "CCSMAlbedo"
                     }
             },{
@@ -72,10 +78,6 @@ void ModuleLoader::init(const VariablesMap& map)
         m_modules.insert(element.first);
     }
 
-    // Load default implementations
-    m_implementations["Albedo"] = "SNUAlbedo";
-    m_implementations["thermodynamics"] = "thermoIce0";
-
     // Load the named implementations from the provided map
     for (auto const& i : map) {
         std::string module = i.first;
@@ -84,21 +86,22 @@ void ModuleLoader::init(const VariablesMap& map)
         if (module == "Albedo") {
             if (impl == "SNUAlbedo") {
                 AlbedoImpl = &newSNUAlbedo;
+            } else if (impl == "SNU2Albedo") {
+                AlbedoImpl = &newSNU2Albedo;
             } else if (impl == "CCSMAlbedo") {
                 AlbedoImpl = &newCCSMAlbedo;
             } else {
                 throwup(module, impl);
             }
-/*
+
         } else if (module == "thermodynamics") {
             if (impl == "thermoWinton") {
                 thermodynamicsImpl = &newthermoWinton;
             } else if (impl == "thermoIce0") {
-                thermosdynamicsImpl = &newthermoIce0;
+                thermodynamicsImpl = &newthermoIce0;
             } else {
                 throwup(module, impl);
             }
-*/
         }
     }
 }
@@ -107,4 +110,9 @@ template<>
 std::unique_ptr<IAlbedo> ModuleLoader::getImplementation() const
 {
     return (*AlbedoImpl)();
+}
+template<>
+std::unique_ptr<Ithermodynamics> ModuleLoader::getImplementation() const
+{
+    return (*thermodynamicsImpl)();
 }

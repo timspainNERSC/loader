@@ -46,10 +46,8 @@ public:
 private:
     // One module could have many names (but probably shouldn't)
     std::set<std::string> m_modules;
-    // Names of implementations
+    // Names of available implementations
     std::map<std::string, std::set<std::string>> m_availableImplementationNames;
-    // Enums of the selected implementations for each module
-    std::map<std::string, std::string> m_implementations;
 };
 
 #endif /* SRC_INCLUDE_MODULELOADER_HPP */
