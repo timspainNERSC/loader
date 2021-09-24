@@ -26,17 +26,11 @@ public:
         return instance;
     }
 
-#include "modules_implementations.ipp"
-
     //typedef boost::program_options::variables_map VariablesMap;
     typedef std::map<std::string, std::string> VariablesMap;
 
     void init(const VariablesMap&);
-    std::set<std::string> listImplementationNames(const Module) const;
     std::set<std::string> listImplementationNames(const std::string&) const;
-    std::string getInterfaceName(const Module) const;
-    Module getModuleFromName(const std::string&) const;
-    void setImplementation(const Module, const std::string&);
     void setImplementation(const std::string&, const std::string&);
     template<class T>
     std::unique_ptr<T> getImplementation() const;
@@ -51,13 +45,11 @@ public:
 
 private:
     // One module could have many names (but probably shouldn't)
-    std::map<std::string, Module> m_modules;
-    // Names of all available implmentations
-    std::map<std::string, Implementation> m_namedImplementations;
+    std::set<std::string> m_modules;
     // Names of implementations
-    std::map<Module, std::set<std::string>> m_availableImplementationNames;
+    std::map<std::string, std::set<std::string>> m_availableImplementationNames;
     // Enums of the selected implementations for each module
-    std::map<Module, Implementation> m_implementations;
+    std::map<std::string, std::string> m_implementations;
 };
 
 #endif /* SRC_INCLUDE_MODULELOADER_HPP */
