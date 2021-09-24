@@ -10,7 +10,48 @@
 
 #include "include/IAlbedo.hpp"
 #include "include/SNUAlbedo.hpp"
+#include "include/SNU2Albedo.hpp"
 #include "include/CCSMAlbedo.hpp"
+
+#include "include/Ithermodynamics.hpp"
+#include "include/thermoWinton.hpp"
+#include "include/thermoIce0.hpp"
+
+// Pointers to functions returning new instances implementing the interfaces
+std::unique_ptr<IAlbedo> (*AlbedoImpl)();
+std::unique_ptr<Ithermodynamics> (*thermodynamicsImpl)();
+
+// Functions creating a new instance of each implementation, and returning it
+// as a pointer to its interface class
+// Albedo
+std::unique_ptr<IAlbedo> newSNUAlbedo()
+{
+    return std::unique_ptr<SNUAlbedo>(new SNUAlbedo);
+}
+std::unique_ptr<IAlbedo> newSNU2Albedo()
+{
+    return std::unique_ptr<SNU2Albedo>(new SNU2Albedo);
+}
+std::unique_ptr<IAlbedo> newCCSMAlbedo()
+{
+    return std::unique_ptr<CCSMAlbedo>(new CCSMAlbedo);
+}
+// thermodynamics
+std::unique_ptr<Ithermodynamics> newthermoWinton()
+{
+return std::unique_ptr<thermoWinton>(new thermoWinton);
+}
+std::unique_ptr<Ithermodynamics> newthermoIce0()
+{
+return std::unique_ptr<thermoIce0>(new thermoIce0);
+}
+
+void throwup(const std::string& module, const std::string& impl)
+{
+    std::string what = "ModuleLoader::init(): Module ";
+    what += module + " does not have an implementation named " + impl;
+    throw std::invalid_argument(what);
+}
 
 void ModuleLoader::init(const VariablesMap& map)
 {
@@ -37,36 +78,41 @@ void ModuleLoader::init(const VariablesMap& map)
         m_modules.insert(element.first);
     }
 
-    // Load default implementations
-    m_implementations["Albedo"] = "SNUAlbedo";
-    m_implementations["thermodynamics"] = "thermoIce0";
-
     // Load the named implementations from the provided map
     for (auto const& i : map) {
         std::string module = i.first;
-        if (m_modules.count(module) < 1) {
-            // Default to ignoring unknown modules
-            continue;
+        std::string impl = i.second;
+
+        if (module == "Albedo") {
+            if (impl == "SNUAlbedo") {
+                AlbedoImpl = &newSNUAlbedo;
+            } else if (impl == "SNU2Albedo") {
+                AlbedoImpl = &newSNU2Albedo;
+            } else if (impl == "CCSMAlbedo") {
+                AlbedoImpl = &newCCSMAlbedo;
+            } else {
+                throwup(module, impl);
+            }
+
+        } else if (module == "thermodynamics") {
+            if (impl == "thermoWinton") {
+                thermodynamicsImpl = &newthermoWinton;
+            } else if (impl == "thermoIce0") {
+                thermodynamicsImpl = &newthermoIce0;
+            } else {
+                throwup(module, impl);
+            }
         }
-        if (m_availableImplementationNames[module].count(i.second) < 1) {
-            std::string what = "ModuleLoader::init(): Module ";
-            what += module + " does not have an implementation named " + i.second;
-            throw std::invalid_argument(what);
-        }
-        m_implementations[i.first] = i.second;
     }
 }
 
 template<>
 std::unique_ptr<IAlbedo> ModuleLoader::getImplementation() const
 {
-    std::string impl = m_implementations.at("Albedo");
-    if (impl == "SNUAlbedo")
-            return std::unique_ptr<SNUAlbedo>(new SNUAlbedo);
-    else if (impl == "CCSMAlbedo")
-            return std::unique_ptr<CCSMAlbedo>(new CCSMAlbedo);
-    // m_implementations should only have valid values due to the check when loading the names into
-    // the map
-    else
-        return nullptr;
+    return (*AlbedoImpl)();
+}
+template<>
+std::unique_ptr<Ithermodynamics> ModuleLoader::getImplementation() const
+{
+    return (*thermodynamicsImpl)();
 }
