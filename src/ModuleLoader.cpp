@@ -6,6 +6,7 @@
 
 #include "include/ModuleLoader.hpp"
 #include <stdexcept>
+#include <memory>
 
 #include "moduleLoaderHeaders.ipp"
 

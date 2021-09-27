@@ -1,13 +1,11 @@
     m_availableImplementationNames = {
-            {
-                    "Interface1", {
+            {"I1", {
                             "Impl11",
-                            "Impl12"
+                            "Impl12",
                     }
-            },{
-                    "Interface2", {
+            },{"I2", {
                             "Impl21",
-                            "Impl22"
+                            "Impl22",
                     }
-            }
+            },
     };
