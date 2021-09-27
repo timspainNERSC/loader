@@ -9,43 +9,9 @@
 #include <memory>
 #include <stdexcept>
 
-#include "include/IAlbedo.hpp"
-#include "include/SNUAlbedo.hpp"
-#include "include/SNU2Albedo.hpp"
-#include "include/CCSMAlbedo.hpp"
+#include "moduleLoaderHeaders.ipp"
 
-#include "include/Ithermodynamics.hpp"
-#include "include/thermoWinton.hpp"
-#include "include/thermoIce0.hpp"
-
-// Pointers to functions returning new instances implementing the interfaces
-std::unique_ptr<IAlbedo> (*AlbedoImpl)();
-std::unique_ptr<Ithermodynamics> (*thermodynamicsImpl)();
-
-// Functions creating a new instance of each implementation, and returning it
-// as a pointer to its interface class
-// Albedo
-std::unique_ptr<IAlbedo> newSNUAlbedo()
-{
-    return std::unique_ptr<SNUAlbedo>(new SNUAlbedo);
-}
-std::unique_ptr<IAlbedo> newSNU2Albedo()
-{
-    return std::unique_ptr<SNU2Albedo>(new SNU2Albedo);
-}
-std::unique_ptr<IAlbedo> newCCSMAlbedo()
-{
-    return std::unique_ptr<CCSMAlbedo>(new CCSMAlbedo);
-}
-// thermodynamics
-std::unique_ptr<Ithermodynamics> newthermoWinton()
-{
-return std::unique_ptr<thermoWinton>(new thermoWinton);
-}
-std::unique_ptr<Ithermodynamics> newthermoIce0()
-{
-return std::unique_ptr<thermoIce0>(new thermoIce0);
-}
+#include "moduleLoaderFunctions.ipp"
 
 void throwup(const std::string& module, const std::string& impl)
 {
@@ -56,23 +22,7 @@ void throwup(const std::string& module, const std::string& impl)
 
 void ModuleLoader::init(const VariablesMap& map)
 {
-    // Initialise the available modules. This is currently hardcoded at compile time.
-    // TODO: Use CMake etc. to create a system that is dynamically built at compile time.
-
-    m_availableImplementationNames = {
-            {
-                    "Albedo", {
-                    "SNUAlbedo",
-                    "SNU2Albedo",
-                    "CCSMAlbedo"
-                    }
-            },{
-                    "thermodynamics", {
-                            "thermoWinton",
-                            "thermoIce0"
-                    }
-            }
-    };
+#include "moduleLoaderNames.ipp"
 
     // Set of all defined interfaces
     for (const auto& element: m_availableImplementationNames) {
@@ -84,36 +34,6 @@ void ModuleLoader::init(const VariablesMap& map)
         std::string module = i.first;
         std::string impl = i.second;
 
-        if (module == "Albedo") {
-            if (impl == "SNUAlbedo") {
-                AlbedoImpl = &newSNUAlbedo;
-            } else if (impl == "SNU2Albedo") {
-                AlbedoImpl = &newSNU2Albedo;
-            } else if (impl == "CCSMAlbedo") {
-                AlbedoImpl = &newCCSMAlbedo;
-            } else {
-                throwup(module, impl);
-            }
-
-        } else if (module == "thermodynamics") {
-            if (impl == "thermoWinton") {
-                thermodynamicsImpl = &newthermoWinton;
-            } else if (impl == "thermoIce0") {
-                thermodynamicsImpl = &newthermoIce0;
-            } else {
-                throwup(module, impl);
-            }
-        }
+#include "moduleLoaderAssignments.ipp"
     }
-}
-
-template<>
-std::unique_ptr<IAlbedo> ModuleLoader::getImplementation() const
-{
-    return (*AlbedoImpl)();
-}
-template<>
-std::unique_ptr<Ithermodynamics> ModuleLoader::getImplementation() const
-{
-    return (*thermodynamicsImpl)();
 }
