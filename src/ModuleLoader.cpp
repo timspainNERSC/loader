@@ -7,6 +7,7 @@
 
 #include "include/ModuleLoader.hpp"
 #include <memory>
+#include <stdexcept>
 
 #include "include/IAlbedo.hpp"
 #include "include/SNUAlbedo.hpp"
