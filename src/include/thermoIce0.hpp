@@ -10,11 +10,13 @@
 
 #include "Ithermodynamics.hpp"
 
-class thermoIce0: public Ithermodynamics {
+namespace ModelDG {
+class thermoIce0: public Model::Ithermodynamics {
 public:
     std::string name() const;
 private:
     std::string realName() const;
 };
+}
 
 #endif /* SRC_INCLUDE_THERMOICE0_HPP_ */

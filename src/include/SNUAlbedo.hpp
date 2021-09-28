@@ -10,9 +10,11 @@
 #ifndef SRC_INCLUDE_SNUALBEDO_HPP_
 #define SRC_INCLUDE_SNUALBEDO_HPP_
 
+namespace Model{
 class SNUAlbedo : public IAlbedo {
 public:
     double albedo();
 };
+}
 
 #endif /* SRC_INCLUDE_SNUALBEDO_HPP_ */

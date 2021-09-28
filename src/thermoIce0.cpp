@@ -7,6 +7,7 @@
 
 #include "include/thermoIce0.hpp"
 
+namespace ModelDG {
 std::string thermoIce0::name() const
 {
     return realName();
@@ -15,4 +16,5 @@ std::string thermoIce0::name() const
 std::string thermoIce0::realName() const
 {
     return "thermoIce0";
+}
 }

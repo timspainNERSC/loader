@@ -7,7 +7,9 @@
 
 #include "include/thermoWinton.hpp"
 
+namespace Model {
 std::string thermoWinton::name() const
 {
     return "thermoWinton";
+}
 }
