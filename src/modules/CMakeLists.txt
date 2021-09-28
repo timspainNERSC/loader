@@ -1,3 +1,5 @@
+find_package( PythonInterp 3 REQUIRED )
+
 set(ModuleLoaderIncludes
     "moduleLoaderHeaders.ipp"
     "moduleLoaderFunctions.ipp"
