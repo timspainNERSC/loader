@@ -2,102 +2,101 @@
 
 def get_iname(name):
     """Returns the name of the interface class, given its string name."""
-    return "I" + name
+    return f"I{name}"
 
 def get_pname(i_name):
     """Returns the name of the function pointer for the interface, given its class name."""
-    return "p_" + i_name
+    return f"p_{i_name}"
 
 def get_fname(impl):
     """Returns the function name for the implementation, given its string name."""
-    return "new" + impl
+    return f"new{impl}"
 
 def headers(all_implementations, ipp_prefix, hpp_prefix):
     """Generates the moduleLoaderHeaders.ipp file."""
-    with open(ipp_prefix + "moduleLoaderHeaders.ipp", "w", encoding="utf-8") as file:
+    with open(f"{ipp_prefix}moduleLoaderHeaders.ipp", "w", encoding="utf-8") as fil:
         for interface in all_implementations:
             i_name = get_iname(interface["name"])
-            file.write("#include \"" + hpp_prefix + i_name + ".hpp\"\n")
+            fil.write(f"#include \"{hpp_prefix}{i_name}.hpp\"\n")
             for impl in interface["implementations"]:
-                file.write("#include \"" +hpp_prefix + impl + ".hpp\"\n")
+                fil.write(f"#include \"{hpp_prefix}{impl}.hpp\"\n")
             # An extra line between interfaces
-            file.write("\n")
+            fil.write("\n")
 
 def functions(all_implementations, ipp_prefix):
     """Generates the moduleLoaderFunctions.ipp file."""
-    with open(ipp_prefix + "moduleLoaderFunctions.ipp", "w", encoding="utf-8") as file:
+    with open(f"{ipp_prefix}moduleLoaderFunctions.ipp", "w", encoding="utf-8") as fil:
         for interface in all_implementations:
             # Define the pointer to function
             i_name = get_iname(interface["name"])
             p_name = get_pname(i_name)
-            file.write("std::unique_ptr<" + i_name + "> (*" + p_name + ")();\n")
+            fil.write(f"std::unique_ptr<{i_name}> (*{p_name})();\n")
             # Define function that call the function pointer
-            file.write(
-                "template<>\n" +
-                "std::unique_ptr<" + i_name + "> ModuleLoader::getImplementation() const\n" +
-                "{\n" +
-                "    return (*" + p_name + ")();\n" +
+            fil.write(
+                "template<>\n"
+                f"std::unique_ptr<{i_name}> ModuleLoader::getImplementation() const\n"
+                "{\n"
+                f"    return (*{p_name})();\n"
                 "}\n"
                 )
             for impl in interface["implementations"]:
-                file.write("// " + impl + "\n")
                 # The function that return the new unique_ptr for each implementation
-                file.write(
-                    "std::unique_ptr<" + i_name + "> " + get_fname(impl) + "()\n" +
-                    "{\n" +
-                    "    return std::unique_ptr<" + impl + ">(new " + impl + ");\n" +
+                fil.write(
+                    f"std::unique_ptr<{i_name}> {get_fname(impl)}()\n"
+                    "{\n"
+                    f"    return std::unique_ptr<{impl}>(new {impl});\n"
                     "}\n"
                     )
             # An extra line between interfaces
-            file.write("\n")
+            fil.write("\n")
 
 def names(all_implementations, ipp_prefix):
     """Generates the moduleLoaderNames.ipp file."""
-    with open(ipp_prefix + "moduleLoaderNames.ipp", "w", encoding="utf-8") as file:
-        file.write(
-            "    m_availableImplementationNames = {\n" +
+    with open(f"{ipp_prefix}moduleLoaderNames.ipp", "w", encoding="utf-8") as fil:
+        fil.write(
+            "    m_availableImplementationNames = {\n"
             "        "
             )
         for interface in all_implementations:
             name = interface["name"]
-            file.write(
-                "{\n" +
-                "        \"" + name + "\", {\n"
+            fil.write(
+                "{\n"
+                f"        \"{name}\", ""{\n"
                 )
             for impl in interface["implementations"]:
-                file.write("            \"" + impl + "\",\n")
-            file.write(
-                "            }\n" +
+                fil.write(f"            \"{impl}\",\n")
+            fil.write(
+                "            }\n"
                 "        },"
                 )
-        file.write("\n    };\n")
+        fil.write("\n    };\n")
 
 def assignments(all_implementations, ipp_prefix):
     """Generates the moduleLoaderAssignments.ipp file."""
-    with open(ipp_prefix + "moduleLoaderAssignments.ipp", "w", encoding="utf-8") as file:
-        file.write("        ")
+    with open(f"{ipp_prefix}moduleLoaderAssignments.ipp", "w", encoding="utf-8") as fil:
+        fil.write("        ")
         for interface in all_implementations:
             name = interface["name"]
             i_name = get_iname(name)
-            file.write(
-                "if (module == \"" + name + "\") {\n" +
+            fil.write(
+                f"if (module == \"{name}\") ""{\n"
                 "            "
                 )
             p_name = get_pname(i_name)
             for impl in interface["implementations"]:
-                file.write(
-                    "if (impl == \"" + impl + "\") {\n"
-                    "                " + p_name + " = &" + get_fname(impl) + ";\n" +
+                fil.write(
+                    f"if (impl == \"{impl}\") ""{\n"
+                    f"                {p_name} = &{get_fname(impl)};\n"
                     "            } else "
                     )
-            file.write(
-                "{\n" +
-                "                throwup(module, impl);\n" +
-                "            }\n" +
-                "\n" +
+            fil.write(
+                "{\n"
+                "                throwup(module, impl);\n"
+                "            }\n"
+                "\n"
                 "        } else "
                 )
-        file.write("{ }")
+        fil.write("{ }")
 
 def generate(all_implementations, ipp_prefix = '', hpp_prefix = ''):
     """Generates the .ipp inclusion files for ModuleLoader.cpp
