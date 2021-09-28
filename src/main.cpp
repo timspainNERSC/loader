@@ -19,20 +19,20 @@ int main(int argc, char* argv[])
     ModuleLoader::VariablesMap map;
     if (argc > 1) {
         if (std::string(argv[1]) == "snu") {
-            map["Model::Albedo"] = "Model::SNUAlbedo";
+            map["Model::IAlbedo"] = "Model::SNUAlbedo";
         } else if (std::string(argv[1]) == "snu2") {
-            map["Model::Albedo"] = "SNU2::SNU2Albedo";
+            map["Model::IAlbedo"] = "SNU2::SNU2Albedo";
         } else if (std::string(argv[1]) == "ccsm"){
-            map["Model::Albedo"] = "Model::CCSMAlbedo";
+            map["Model::IAlbedo"] = "Model::CCSMAlbedo";
         } else if (std::string(argv[1]) == "ukmoum"){
-            map["Model::Albedo"] = "UM::UMAlbedo";
+            map["Model::IAlbedo"] = "UM::UMAlbedo";
         }
     }
     if (argc > 2) {
         if (std::string(argv[2]) == "winton") {
-            map["Model::thermodynamics"] = "Model::thermoWinton";
+            map["Model::Ithermodynamics"] = "Model::thermoWinton";
         } else if (std::string(argv[2]) == "ice0"){
-            map["Model::thermodynamics"] = "ModelDG::thermoIce0";
+            map["Model::Ithermodynamics"] = "ModelDG::thermoIce0";
         }
     }
 
