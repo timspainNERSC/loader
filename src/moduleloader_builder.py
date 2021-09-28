@@ -112,14 +112,16 @@ def generate(all_implementations, ipp_prefix = '', hpp_prefix = ''):
     assignments(all_implementations, ipp_prefix)
 
 if __name__ == "__main__":
-#    i1 = {"name": "I1", "implementations": ["Impl11", "Impl12"]}
-#    i2 = {"name": "I2", "implementations": ["Impl21", "Impl22"]}
-#
-#    alli = [i1, i2]
 
-    iAlb = {"name": "Albedo", "implementations": ["SNUAlbedo", "SNU2Albedo", "CCSMAlbedo"]}
-    ithe = {"name": "thermodynamics", "implementations": ["thermoWinton", "thermoIce0"]}
+    import argparse
+    import json
 
-    alli = [iAlb, ithe]
+    parser =  argparse.ArgumentParser(description = "Build inclusion files for ModuleLoader.cpp")
+    parser.add_argument("json_file", metavar = "file", nargs = '?', default = None,
+                         type = argparse.FileType('r', encoding="utf-8"),
+                         help = "JSON file containing the specification of interfaces and implementations")
+    args = parser.parse_args()
+
+    alli = json.load(args.json_file)
 
     generate(alli, hpp_prefix = "include/")

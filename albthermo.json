@@ -1,0 +1,16 @@
+[
+    {
+    "name": "Albedo",
+    "implementations": [
+        "SNUAlbedo",
+        "SNU2Albedo",
+        "CCSMAlbedo"
+        ]
+    },{
+    "name": "thermodynamics",
+    "implementations": [
+        "thermoWinton",
+        "thermoIce0"
+        ]
+    }
+]
