@@ -102,9 +102,11 @@ def generate(all_implementations, ipp_prefix = '', hpp_prefix = ''):
     """Generates the .ipp inclusion files for ModuleLoader.cpp
 
     :param all_implementations: The vector of dictionaries that defines the
-           interfaces and implementations thereof.
-    :param prefix: A directory and file prefix that preceeds the file names to
-           provide a path from the current working directory.
+            interfaces and implementations thereof.
+    :param ipp_prefix: A directory and file prefix that precedes the ipp file 
+            names to provide a path from the current working directory.
+    :param hpp_prefix: A text directory and file prefix to add to the hpp file
+            names to suit the locations in the build system.
     """
     headers(all_implementations, ipp_prefix, hpp_prefix)
     functions(all_implementations, ipp_prefix)
@@ -126,6 +128,10 @@ if __name__ == "__main__":
                         help = "Path to the module header file name.")
     args = parser.parse_args()
 
+    if args.json_file == None:
+        json_file = open("modules.json")
+    else:
+        json_file = args.json_file
     alli = json.load(args.json_file)
 
     generate(alli, hpp_prefix = args.hpp_prefix, ipp_prefix = args.ipp_prefix)
