@@ -120,8 +120,12 @@ if __name__ == "__main__":
     parser.add_argument("json_file", metavar = "file", nargs = '?', default = None,
                          type = argparse.FileType('r', encoding="utf-8"),
                          help = "JSON file containing the specification of interfaces and implementations")
+    parser.add_argument("--ipp", dest = "ipp_prefix", default = "./",
+                        help = "Path and file prefix to be added to the .ipp file names.")
+    parser.add_argument("--hpp", dest = "hpp_prefix", default = "include/",
+                        help = "Path to the module header file name.")
     args = parser.parse_args()
 
     alli = json.load(args.json_file)
 
-    generate(alli, hpp_prefix = "include/")
+    generate(alli, hpp_prefix = args.hpp_prefix, ipp_prefix = args.ipp_prefix)
