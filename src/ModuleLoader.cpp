@@ -30,7 +30,7 @@ void ModuleLoader::init(const VariablesMap& map)
     }
 
     // Load the named implementations from the provided map
-    for (auto const& i : map) {
+    for (const auto& i : map) {
         std::string module = i.first;
         std::string impl = i.second;
 
