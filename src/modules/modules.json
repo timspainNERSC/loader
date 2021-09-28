@@ -1,16 +1,16 @@
 [
     {
-    "name": "Albedo",
+    "name": "Model::Albedo",
     "implementations": [
-        "SNUAlbedo",
-        "SNU2Albedo",
-        "CCSMAlbedo"
+        "Model::SNUAlbedo",
+        "SNU2::SNU2Albedo",
+        "Model::CCSMAlbedo"
         ]
     },{
-    "name": "thermodynamics",
+    "name": "Model::thermodynamics",
     "implementations": [
-        "thermoWinton",
-        "thermoIce0"
+        "Model::thermoWinton",
+        "ModelDG::thermoIce0"
         ]
     }
 ]
