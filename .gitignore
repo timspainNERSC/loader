@@ -37,3 +37,4 @@
 /.project
 /.settings
 /.pydevproject
+/src/moduleLoader*.ipp
