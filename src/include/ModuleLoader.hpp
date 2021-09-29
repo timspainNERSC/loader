@@ -36,6 +36,7 @@ public:
     template<class T>
     std::unique_ptr<T> getImplementation() const;
 
+    void setImplementation(const std::string& module, const std::string& impl);
     // Singleton function definitions
 private:
     ModuleLoader() {};
