@@ -10,9 +10,11 @@
 
 #include "Ithermodynamics.hpp"
 
+namespace Model {
 class thermoWinton: public Ithermodynamics {
 public:
     std::string name() const;
 };
+}
 
 #endif /* SRC_INCLUDE_THERMOWINTON_HPP_ */

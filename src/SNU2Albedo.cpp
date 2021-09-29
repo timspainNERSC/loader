@@ -7,7 +7,9 @@
 
 #include "include/SNU2Albedo.hpp"
 
+namespace SNU2 {
 double SNU2Albedo::albedo()
 {
     return 0.15;
+}
 }

@@ -10,9 +10,11 @@
 #ifndef SRC_INCLUDE_CCSMALBEDO_HPP_
 #define SRC_INCLUDE_CCSMALBEDO_HPP_
 
+namespace Model {
 class CCSMAlbedo : public IAlbedo {
 public:
     double albedo();
 };
+}
 
 #endif /* SRC_INCLUDE_CCSMALBEDO_HPP_ */

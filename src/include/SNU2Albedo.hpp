@@ -10,9 +10,11 @@
 #ifndef SRC_INCLUDE_SNU2ALBEDO_HPP_
 #define SRC_INCLUDE_SNU2ALBEDO_HPP_
 
-class SNU2Albedo : public IAlbedo {
+namespace SNU2 {
+class SNU2Albedo : public Model::IAlbedo {
 public:
     double albedo();
 };
+}
 
 #endif /* SRC_INCLUDE_SNU2ALBEDO_HPP_ */

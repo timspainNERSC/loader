@@ -7,7 +7,9 @@
 
 #include "include/CCSMAlbedo.hpp"
 
+namespace Model {
 double CCSMAlbedo::albedo()
 {
     return 0.6;
+}
 }
