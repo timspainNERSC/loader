@@ -10,11 +10,11 @@ thermoWinton.cpp
 thermoIce0.cpp
 )
 
-target_include_directories(loader_ex PRIVATE "/opt/home/include" "include")
+target_include_directories(loader_ex PRIVATE "/opt/home/include" "include" "modules" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Build the module loader files. Defines the 'parse_modules' target
 set(ModuleLoaderIppTargetDirectory
-"${CMAKE_CURRENT_SOURCE_DIR}/")
+"${CMAKE_CURRENT_SOURCE_DIR}/modules/")
 add_subdirectory(modules)
 
 add_dependencies(loader_ex parse_modules)
