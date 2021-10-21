@@ -9,8 +9,6 @@
 
 #include <iostream>
 
-namespace Nextsim {
-
 std::vector<std::unique_ptr<std::istream>> Configurator::sources;
 int Configurator::m_argc;
 char** Configurator::m_argv;
@@ -55,4 +53,3 @@ boost::program_options::variables_map Configurator::parse(const boost::program_o
 
     return vm;
 }
-} /* namespace Nextsim */

@@ -15,7 +15,6 @@
 #include <string>
 #include <boost/program_options.hpp>
 
-namespace Nextsim {
 
 /*!
  * A class to handle the sources of configuration, both files and the command line.
@@ -107,7 +106,5 @@ private:
     static int m_argc;
     static char** m_argv;
 };
-
-} /* namespace Nextsim */
 
 #endif /* SRC_INCLUDE_CONFIGURATOR_HPP */
