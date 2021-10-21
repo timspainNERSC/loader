@@ -18,12 +18,14 @@ public:
     static ModuleLoader& getLoader()
     {
         static ModuleLoader instance; // C++11 magic static
+        instance.init();
         return instance;
     }
 
     //typedef boost::program_options::variables_map VariablesMap;
     typedef std::map<std::string, std::string> VariablesMap;
 
+    void init();
     void init(const VariablesMap&);
     inline const std::set<std::string>& listModules() const
     {
@@ -40,11 +42,14 @@ public:
     // Singleton function definitions
 private:
     ModuleLoader() {};
+
 public:
     ModuleLoader(const ModuleLoader&)   = delete;
     void operator=(const ModuleLoader&) = delete;
 
 private:
+    // Make sure initialization happens
+    bool isInit = false;
     // One module could have many names (but probably shouldn't)
     std::set<std::string> m_modules;
     // Names of available implementations
