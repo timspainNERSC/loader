@@ -51,12 +51,12 @@ int main(int argc, char* argv[])
     }
 
     std::unique_ptr<Model::IAlbedo> pAlbedo;
-    pAlbedo = loader.getImplementation<Model::IAlbedo>();
+    pAlbedo = loader.getInstance<Model::IAlbedo>();
     double albedo = pAlbedo->albedo();
 
     std::cout << "Albedo is " << albedo << std::endl;
 
-    std::unique_ptr<Model::Ithermodynamics> pthermo = loader.getImplementation<Model::Ithermodynamics>();
+    std::unique_ptr<Model::Ithermodynamics> pthermo = loader.getInstance<Model::Ithermodynamics>();
 
     std::cout << "Thermodynamics routine is named " << pthermo->name() << std::endl;
 }

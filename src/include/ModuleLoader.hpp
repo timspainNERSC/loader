@@ -36,7 +36,10 @@ public:
         return m_availableImplementationNames.at(module);
     }
     template<class T>
-    std::unique_ptr<T> getImplementation() const;
+    std::unique_ptr<T> getInstance() const;
+
+    template<class T>
+    T& getImplementation();
 
     void setImplementation(const std::string& module, const std::string& impl);
     // Singleton function definitions
