@@ -9,9 +9,6 @@
 
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
-#ifndef TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
-#include "/opt/home/include/catch2/catch.hpp"
-#endif
 
 # include "testClasses.hpp"
 TEST_CASE("Basic module loading test", "[ModuleLoader]")
@@ -25,5 +22,5 @@ TEST_CASE("Basic module loading test", "[ModuleLoader]")
 
     Impl1 i1;
 
-    REQUIRE(typeid(i1) == typeid(*(ldr.getImplementation<ITest>())));
+    REQUIRE(typeid(i1) == typeid(*(ldr.getInstance<ITest>())));
 }
