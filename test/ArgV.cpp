@@ -7,8 +7,6 @@
 
 #include "ArgV.hpp"
 
-namespace Nextsim {
-
 ArgV::ArgV(std::vector<std::string> vs)
 {
     nStrings = vs.size();
@@ -44,5 +42,4 @@ char** ArgV::operator()()
 int ArgV::argc()
 {
     return nStrings;
-}
 }
