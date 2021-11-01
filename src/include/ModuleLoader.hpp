@@ -8,10 +8,10 @@
 #ifndef SRC_INCLUDE_MODULELOADER_HPP
 #define SRC_INCLUDE_MODULELOADER_HPP
 
+#include <map>
 #include <memory>
 #include <string>
 #include <set>
-#include <boost/program_options.hpp>
 
 class ModuleLoader {
 public:
