@@ -18,3 +18,12 @@ set(ModuleLoaderIppTargetDirectory
 add_subdirectory(modules)
 
 add_dependencies(loader_ex parse_modules)
+
+add_executable(loader_nu
+    "main2.cpp"
+    "SNUAlbedo.cpp"
+    "CCSMAlbedo.cpp"
+    "IAlbedoModule.cpp"
+    )
+    
+target_include_directories(loader_nu PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
