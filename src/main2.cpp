@@ -16,10 +16,10 @@ namespace Model {
 void doIt()
 {
     Module::setImplementation<IAlbedo>("SNUAlbedo");
-    std::cout << Module::getImplementation<IAlbedo>()->albedo() << std::endl;
+    std::cout << Module::getImplementation<IAlbedo>().albedo() << std::endl;
 
     Module::setImplementation<IAlbedo>("CCSMAlbedo");
-    std::cout << Module::getImplementation<IAlbedo>()->albedo() << std::endl;
+    std::cout << Module::getImplementation<IAlbedo>().albedo() << std::endl;
 }
 }
 
