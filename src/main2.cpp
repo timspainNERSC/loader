@@ -13,6 +13,8 @@
 namespace Model {
 void doIt()
 {
+    std::cout << "Working with " << Module::IAlbedoModule::moduleName() << std::endl;
+
     Module::setImplementation<IAlbedo>("SNUAlbedo");
     std::cout << Module::getImplementation<IAlbedo>().albedo() << std::endl;
 

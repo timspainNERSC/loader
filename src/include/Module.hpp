@@ -43,6 +43,10 @@ void setImplTemplate(const std::string& implName)
 template <typename I>
 class Module {
 public:
+    typedef std::function<std::unique_ptr<I>()> fn;
+    typedef std::map<std::string, fn> map;
+
+
     static void setImplementation(const std::string& implName)
     {
         spf = functionMap.at(implName);
@@ -68,18 +72,20 @@ public:
         return keys;
     }
 
+    static std::string moduleName();
+
 private:
-    static std::function<std::unique_ptr<I>()> spf;
+    static fn spf;
     static std::unique_ptr<I> staticInstance;
-    static std::map<std::string, std::function<std::unique_ptr<I>()>> functionMap;
+    static map functionMap;
 
 };
 
 template <typename I>
-std::function<std::unique_ptr<I>()> Module<I>::spf;
+typename Module<I>::fn Module<I>::spf;
 template <typename I>
 std::unique_ptr<I> Module<I>::staticInstance;
 template <typename I>
-std::map<std::string, std::function<std::unique_ptr<I>()>> Module<I>::functionMap;
+typename Module<I>::map Module<I>::functionMap;
 }
 #endif /* SRC_MODULE_HPP */

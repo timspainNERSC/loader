@@ -15,14 +15,20 @@ const std::string IAlbedoModule::SNU_ALBEDO = "SNUAlbedo";
 const std::string IAlbedoModule::CCSM_ALBEDO = "CCSMAlbedo";
 
 template <>
-std::map<std::string, std::function<std::unique_ptr<Model::IAlbedo>()>> Module<Model::IAlbedo>::functionMap = {
+Module<Model::IAlbedo>::map Module<Model::IAlbedo>::functionMap = {
         {IAlbedoModule::SNU_ALBEDO, newImpl<Model::IAlbedo, Model::SNUAlbedo>},
         {IAlbedoModule::CCSM_ALBEDO, newImpl<Model::IAlbedo, Model::CCSMAlbedo>},
 };
 template <>
-std::function<std::unique_ptr<Model::IAlbedo>()> Module<Model::IAlbedo>::spf = functionMap.at(IAlbedoModule::SNU_ALBEDO);
+Module<Model::IAlbedo>::fn Module<Model::IAlbedo>::spf = functionMap.at(IAlbedoModule::SNU_ALBEDO);
 template <>
 std::unique_ptr<Model::IAlbedo> Module<Model::IAlbedo>::staticInstance = std::move(spf());
+
+template<>
+std::string Module<Model::IAlbedo>::moduleName()
+{
+    return "IAlbedo";
+}
 
 template<>
 Model::IAlbedo& getImplementation<Model::IAlbedo>()
