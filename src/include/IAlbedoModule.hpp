@@ -9,8 +9,6 @@
 #define SRC_INCLUDE_IALBEDOMODULE_HPP
 
 #include "include/IAlbedo.hpp"
-#include "include/SNUAlbedo.hpp"
-#include "include/CCSMAlbedo.hpp"
 
 #include "include/Module.hpp"
 
@@ -18,7 +16,6 @@ namespace Module {
 
 class IAlbedoModule : public Module<Model::IAlbedo>
 {
-
 };
 
 }

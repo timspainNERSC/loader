@@ -8,9 +8,11 @@
 #ifndef SRC_MODULE_HPP
 #define SRC_MODULE_HPP
 
+#include <functional>
 #include <list>
-#include <string>
+#include <map>
 #include <memory>
+#include <string>
 
 namespace Module {
 
@@ -29,7 +31,11 @@ void setImplementation(const std::string&);
 template <typename I>
 class Module {
 public:
-    static void setImplementation(const std::string& implName);
+    static void setImplementation(const std::string& implName)
+    {
+        spf = functionMap.at(implName);
+        staticInstance = std::move(spf());
+    }
 
     static std::unique_ptr<I> getInstance()
     {
@@ -44,17 +50,17 @@ public:
     static std::list<std::string> listImplementations();
 
 private:
-    static void setStaticImplementation() {
-        staticInstance = std::move(spf());
-    }
-
     static std::function<std::unique_ptr<I>()> spf;
     static std::unique_ptr<I> staticInstance;
+    static std::map<std::string, std::function<std::unique_ptr<I>()>> functionMap;
+
 };
 
 template <typename I>
 std::function<std::unique_ptr<I>()> Module<I>::spf;
 template <typename I>
 std::unique_ptr<I> Module<I>::staticInstance;
+template <typename I>
+std::map<std::string, std::function<std::unique_ptr<I>()>> Module<I>::functionMap;
 }
 #endif /* SRC_MODULE_HPP */

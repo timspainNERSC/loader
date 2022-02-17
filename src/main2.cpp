@@ -6,8 +6,6 @@
  */
 
 
-#include "include/IAlbedo.hpp"
-#include "include/SNUAlbedo.hpp"
 #include "include/IAlbedoModule.hpp"
 
 #include <iostream>

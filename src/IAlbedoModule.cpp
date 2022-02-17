@@ -7,6 +7,9 @@
 
 #include "include/IAlbedoModule.hpp"
 
+#include "include/CCSMAlbedo.hpp"
+#include "include/SNUAlbedo.hpp"
+
 #include <functional>
 #include <list>
 #include <memory>
@@ -16,6 +19,11 @@ template <>
 std::function<std::unique_ptr<Model::IAlbedo>()> Module<Model::IAlbedo>::spf = [](){return std::unique_ptr<Model::IAlbedo> (new Model::SNUAlbedo); };
 template <>
 std::unique_ptr<Model::IAlbedo> Module<Model::IAlbedo>::staticInstance = nullptr;
+template <>
+std::map<std::string, std::function<std::unique_ptr<Model::IAlbedo>()>> Module<Model::IAlbedo>::functionMap = {
+        {"SNUAlbedo", []() { return std::unique_ptr<Model::IAlbedo> (new Model::SNUAlbedo); } },
+        {"CCSMAlbedo", []() { return std::unique_ptr<Model::IAlbedo> (new Model::CCSMAlbedo); } },
+};
 
 template <>
 std::string getImplementationName<Model::SNUAlbedo>();
@@ -25,20 +33,6 @@ template <>
 std::string getImplementationName<Model::CCSMAlbedo>();
 template <>
 std::string getInterfaceName<Model::CCSMAlbedo>();
-
-template <>
-void Module<Model::IAlbedo>::setImplementation(const std::string& implName)
-{
-    if (implName == getImplementationName<Model::SNUAlbedo>()) {
-        spf = []() { return std::unique_ptr<Model::IAlbedo> (new Model::SNUAlbedo); };
-    } else if (implName == getImplementationName<Model::CCSMAlbedo>()) {
-        spf = []() { return std::unique_ptr<Model::IAlbedo> (new Model::CCSMAlbedo); };
-    } else {
-        std::string what = "IAlbedoModule::setImplementation: no known implementation named " + implName;
-        throw std::invalid_argument(what);
-    }
-    setStaticImplementation();
-}
 
 template <>
 std::list<std::string> Module<Model::IAlbedo>::listImplementations()
