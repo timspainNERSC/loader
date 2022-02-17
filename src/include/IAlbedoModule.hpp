@@ -14,11 +14,11 @@
 
 namespace Module {
 
-static const std::string SNU_ALBEDO = "SNUAlbedo";
-static const std::string CCSM_ALBEDO = "CCSMAlbedo";
-
 class IAlbedoModule : public Module<Model::IAlbedo>
 {
+public:
+    static const std::string SNU_ALBEDO;
+    static const std::string CCSM_ALBEDO;
 };
 
 }

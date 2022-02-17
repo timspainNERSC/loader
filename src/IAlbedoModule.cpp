@@ -11,13 +11,16 @@
 #include "include/SNUAlbedo.hpp"
 
 namespace Module {
+const std::string IAlbedoModule::SNU_ALBEDO = "SNUAlbedo";
+const std::string IAlbedoModule::CCSM_ALBEDO = "CCSMAlbedo";
+
 template <>
 std::map<std::string, std::function<std::unique_ptr<Model::IAlbedo>()>> Module<Model::IAlbedo>::functionMap = {
-        {SNU_ALBEDO, newImpl<Model::IAlbedo, Model::SNUAlbedo>},
-        {CCSM_ALBEDO, newImpl<Model::IAlbedo, Model::CCSMAlbedo>},
+        {IAlbedoModule::SNU_ALBEDO, newImpl<Model::IAlbedo, Model::SNUAlbedo>},
+        {IAlbedoModule::CCSM_ALBEDO, newImpl<Model::IAlbedo, Model::CCSMAlbedo>},
 };
 template <>
-std::function<std::unique_ptr<Model::IAlbedo>()> Module<Model::IAlbedo>::spf = functionMap.at(SNU_ALBEDO);
+std::function<std::unique_ptr<Model::IAlbedo>()> Module<Model::IAlbedo>::spf = functionMap.at(IAlbedoModule::SNU_ALBEDO);
 template <>
 std::unique_ptr<Model::IAlbedo> Module<Model::IAlbedo>::staticInstance = std::move(spf());
 
